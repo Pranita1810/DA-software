@@ -1,0 +1,3 @@
+Quick : We are building an automated workflow that creates a video or image and upload it on social media by itself. 
+Tools : GitHub, LLM, Python, Kafka, Redis-Celery, ML, API.
+
