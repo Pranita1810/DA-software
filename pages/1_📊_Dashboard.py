@@ -10,7 +10,7 @@ from db__.session import init_session, get_df
 from pipeline.loader import load_sample
 
 st.set_page_config(page_title="Dashboard · DataPulse", page_icon="📊", layout="wide")
-
+st.info("Wassup big boi hehehehehehehehe")
 # ── Shared CSS (imported from app.py via rerun or inline here) ───────────────
 st.markdown("""
 <style>
