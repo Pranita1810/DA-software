@@ -5,6 +5,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from db__.session import init_session, set_df, get_df
 from pipeline.loader import load_uploaded_file, load_sample, clean_dataframe
 
+st.write("Hello Test")
 st.set_page_config(page_title="Upload · DataPulse", page_icon="📁", layout="wide")
 st.markdown("""
 <style>
