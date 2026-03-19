@@ -1,0 +1,85 @@
+╔══════════════════════════════════════════════════════════════════╗
+║            ⚡ DATAPULSE  —  ARCHITECTURE OVERVIEW               ║
+╚══════════════════════════════════════════════════════════════════╝
+
+PROJECT STRUCTURE
+─────────────────
+DA-Software/
+├── app.py                   ← Entry point  (Home + branding)
+│
+├── pages/                   ← Streamlit multi-page routing
+│   ├── 1_📊_Dashboard.py    ← KPI metrics, trend charts, filters
+│   ├── 2_📁_Data_Upload.py  ← File ingest (CSV/Excel/Parquet/JSON)
+│   ├── 3_🔍_EDA.py          ← Auto EDA: stats, distributions, corr
+│   ├── 4_📈_Visualisations.py ← Interactive chart builder
+│   └── 5_📋_Reports.py      ← Generate & export reports
+│
+├── analysis/                ← Pure-Python analytics helpers
+│   ├── eda.py               ← Summary stats, missing, outliers, corr
+│   └── stats.py             ← Normality, z-scores, group-agg, time-series
+│
+├── pipeline/                ← Data loading & cleaning
+│   └── loader.py            ← File readers, sample data, basic cleaner
+│
+└── db__/                    ← State management
+    └── session.py           ← Streamlit session_state helpers
+
+
+DATA FLOW
+─────────
+[User] ──upload / sample──► [pipeline/loader.py]
+                                     │
+                              clean_dataframe()
+                                     │
+                              db__/session.py  ← global state
+                                     │
+              ┌──────────────────────┼──────────────────────┐
+              ▼                      ▼                       ▼
+    analysis/eda.py        analysis/stats.py         pages/*
+    (describe, corr,       (normality, z-score,      (charts, tables,
+     outliers, cats)        group-agg, time-series)   exports)
+
+
+PAGES & FEATURES
+────────────────
+1. Home (app.py)         — Landing, nav cards, session metrics
+2. Dashboard             — KPI row, trend line, breakdown pie/bar,
+                           scatter, sidebar filters
+3. Data Upload           — Drag-drop or sample loader, dtype viewer,
+                           auto-clean toggle
+4. EDA                   — 6 tabs: overview, distributions (hist/box/
+                           violin), correlation heatmap, outlier IQR,
+                           categorical bar, normality tests
+5. Visualisations        — Full chart builder: 11 chart types, 5
+                           palettes, aggregate controls, title editor
+6. Reports               — Section picker, Excel / CSV / Markdown
+                           export, full dataset Parquet download
+
+
+DEPENDENCIES  (pip install)
+───────────────────────────
+streamlit
+pandas
+numpy
+plotly
+openpyxl          # Excel export
+pyarrow           # Parquet support
+scipy             # Normality tests
+tabulate          # Markdown tables in reports
+
+
+RUN
+───
+  streamlit run app.py
+
+
+DESIGN SYSTEM
+─────────────
+  Theme    : Dark (bg #08090d)
+  Accent   : Electric cyan  #00e5ff
+  Accent2  : Purple         #7b61ff
+  Green    : Neon           #00ffa3
+  Amber    : Warning        #ffb647
+  Red      : Alert          #ff4d6d
+  Heading  : Syne (Google Fonts)
+  Mono     : JetBrains Mono (Google Fonts)
