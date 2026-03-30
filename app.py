@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import streamlit as st
 from src.analysis import df, total_revenue, top_products, sales_by_category, sales_by_region, monthly_sales
 import numpy as np
@@ -958,4 +957,3 @@ st.markdown("""
     ⚡ DATAPULSE v1.0 · Built with Streamlit · © 2026
 </div>
 """, unsafe_allow_html=True)
->>>>>>> 3720f8540f185dec1bc7b3d5e2f3612f93dff36d
