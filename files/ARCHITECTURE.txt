@@ -1,18 +1,11 @@
 ╔══════════════════════════════════════════════════════════════════╗
-║            ⚡ DATAPULSE  —  ARCHITECTURE OVERVIEW               ║
+║            ⚡ DATAPULSE  —  ARCHITECTURE OVERVIEW                ║ 
 ╚══════════════════════════════════════════════════════════════════╝
 
 PROJECT STRUCTURE
 ─────────────────
 DA-Software/
 ├── app.py                   ← Entry point  (Home + branding)
-│
-├── pages/                   ← Streamlit multi-page routing
-│   ├── 1_📊_Dashboard.py    ← KPI metrics, trend charts, filters
-│   ├── 2_📁_Data_Upload.py  ← File ingest (CSV/Excel/Parquet/JSON)
-│   ├── 3_🔍_EDA.py          ← Auto EDA: stats, distributions, corr
-│   ├── 4_📈_Visualisations.py ← Interactive chart builder
-│   └── 5_📋_Reports.py      ← Generate & export reports
 │
 ├── analysis/                ← Pure-Python analytics helpers
 │   ├── eda.py               ← Summary stats, missing, outliers, corr
