@@ -1,3 +1,18 @@
-Quick : We are building an automated workflow that creates a video or image and upload it on social media by itself. 
-Tools : GitHub, LLM, Python, Kafka, Redis-Celery, ML, API.
+Quick Summary : This is an Exponential Data Analytical project which focuses on extracting meaningful insights from data which helps
+                to build business strategies and decision making which impacts business in positive way.
+		This is a system designed data pipeline which sends reports each week and builds business strategy based on data with 
+		the help of LLM.
 
+
+Tech Stack    : Power BI, Python, SQL, LLM, ML, AI.
+
+
+
+data-analytics-project/
+
+├── data/              # dataset
+├── src/
+│   ├── pipeline.py    # data extraction & processing
+│   ├── analysis.py    # insights / KPIs
+├── dashboard/         # Power BI file	
+└── main.py       

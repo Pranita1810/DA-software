@@ -1,0 +1,15 @@
+version: "3.9"
+
+services:
+  eda-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: eda_software
+    ports:
+      - "8501:8501"           # Access at http://localhost:8501
+    volumes:
+      - ./DataSets:/app/DataSets   # Mount datasets so changes reflect live
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
