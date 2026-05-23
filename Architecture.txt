@@ -1,0 +1,27 @@
+DataPulse Architecture (Refactored)
+
+1. Core Configuration (`src/config.py`)
+   - Centralized constants for file paths, column names, and UI themes.
+
+2. Data Layer
+   - Source data in `DataSets/` (Orders, Customers, Products).
+   - `src/data_manager.py`: Handles loading and KPI calculation for the merged dataset.
+   - `src/aggregations.py`: Specialized grouping and aggregation logic for analytics.
+
+3. Pipeline Layer (`src/pipeline.py`)
+   - ETL process: Loads raw CSVs, cleans data, joins tables.
+   - Outputs `DataSets/FinalSalesData.csv`.
+   - Includes logging for better observability.
+
+4. UI & Presentation Layer
+   - `src/styles.py`: Centralized CSS, Plotly layouts, and HTML templates.
+   - `src/components.py`: Reusable Streamlit UI components (KPI cards, chart wrappers).
+   - `app.py`: Main dashboard entry point. Modular page routing.
+
+5. Analytics Extensions
+   - `analysis/eda.py`: Deep Exploratory Data Analysis tool.
+   - `analysis/eda_logic.py`: (Internal helpers for stats and profiling).
+
+6. Verification & Deployment
+   - `tests/test_sales_pipeline.py`: Unit tests for pipeline and logic.
+   - `Dockerfile` & `docker-compose.yml`: Containerization for consistent deployment.

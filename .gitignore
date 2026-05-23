@@ -1,16 +1,14 @@
-<<<<<<< HEAD
 venv/
+.venv/
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
 .env
-.DS_Store
-*.log
-=======
-venv/
-__pycache__/
-*.pyc
-*.pyo
 *.env
 .pytest_cache/
->>>>>>> 3720f8540f185dec1bc7b3d5e2f3612f93dff36d
+.mypy_cache/
+.ruff_cache/
+.DS_Store
+*.log
+build/
+source/_autosummary/

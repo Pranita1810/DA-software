@@ -1,7 +1,13 @@
-lst = [1,4,5,2,5,6,3,5,32,5]
-largest = 0
-for i in lst:
-    if i > largest:
-        largest = i
+"""Compatibility test entry point.
 
-print(largest)
+Prefer `python -m unittest discover -s tests` for normal test runs.
+"""
+
+import sys
+import unittest
+
+
+if __name__ == "__main__":
+    suite = unittest.defaultTestLoader.discover("tests")
+    result = unittest.TextTestRunner(verbosity=2).run(suite)
+    sys.exit(0 if result.wasSuccessful() else 1)

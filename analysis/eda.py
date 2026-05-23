@@ -10,38 +10,11 @@ from pipeline.loader import load_sample
 from analysis.eda import (summary_stats, full_missing_report, correlation_matrix,
                            outlier_summary, value_counts_top, numeric_cols, categorical_cols)
 from analysis.stats import normality_tests
+from src.styles import EDA_CSS, EDA_PLOT_LAYOUT, EDA_COLORS
+from src.config import APP_TITLE, PAGE_ICON
 
-st.set_page_config(page_title="EDA · DataPulse", page_icon="🔍", layout="wide")
-SHARED_CSS = """
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap');
-:root{--bg:#08090d;--surface:#0f1118;--card:#141720;--border:#1e2235;
-      --accent:#00e5ff;--accent2:#7b61ff;--green:#00ffa3;--amber:#ffb647;
-      --red:#ff4d6d;--text:#e8eaf0;--muted:#6b7280;
-      --font-head:'Syne',sans-serif;--font-mono:'JetBrains Mono',monospace;}
-html,body,[class*="css"]{font-family:var(--font-mono);background:var(--bg)!important;color:var(--text);}
-[data-testid="stSidebar"]{background:var(--surface)!important;border-right:1px solid var(--border);}
-[data-testid="metric-container"]{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px!important;}
-[data-testid="metric-container"] label{color:var(--muted)!important;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;}
-[data-testid="metric-container"] [data-testid="stMetricValue"]{color:var(--accent)!important;font-family:var(--font-head);font-size:2rem!important;}
-.stButton>button{background:transparent;border:1px solid var(--accent);color:var(--accent);font-family:var(--font-mono);font-size:12px;letter-spacing:1px;border-radius:6px;padding:8px 20px;transition:all .2s;}
-.stButton>button:hover{background:var(--accent);color:var(--bg);}
-hr{border-color:var(--border)!important;}
-.stTabs [data-baseweb="tab-list"]{gap:4px;background:transparent;border-bottom:1px solid var(--border);}
-.stTabs [data-baseweb="tab"]{background:transparent;color:var(--muted);font-family:var(--font-mono);font-size:12px;letter-spacing:1px;border-radius:4px 4px 0 0;padding:8px 18px;}
-.stTabs [aria-selected="true"]{background:var(--card)!important;color:var(--accent)!important;border-bottom:2px solid var(--accent)!important;}
-</style>
-"""
-st.markdown(SHARED_CSS, unsafe_allow_html=True)
-
-PLOTLY_LAYOUT = dict(
-    paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-    font=dict(family="JetBrains Mono", color="#e8eaf0", size=11),
-    margin=dict(l=10, r=10, t=35, b=10),
-    xaxis=dict(showgrid=True, gridcolor="#1e2235", zeroline=False),
-    yaxis=dict(showgrid=True, gridcolor="#1e2235", zeroline=False),
-)
-COLORS = ["#00e5ff","#7b61ff","#00ffa3","#ffb647","#ff4d6d","#e879f9"]
+st.set_page_config(page_title=f"EDA · {APP_TITLE}", page_icon=PAGE_ICON, layout="wide")
+st.markdown(EDA_CSS, unsafe_allow_html=True)
 
 init_session()
 df = get_df()
@@ -99,18 +72,18 @@ with t2:
             fig = px.histogram(df, x=sel_col, nbins=40,
                                color_discrete_sequence=["#00e5ff"],
                                marginal="rug")
-            fig.update_layout(**PLOTLY_LAYOUT, title=f"Distribution: {sel_col}", height=380)
+            fig.update_layout(**EDA_PLOT_LAYOUT, title=f"Distribution: {sel_col}", height=380)
         elif chart_type == "Box":
             cat_cols = categorical_cols(df)
             group_by = st.selectbox("Group by (optional)", ["None"] + cat_cols, key="box_grp")
             color_by = None if group_by == "None" else group_by
             fig = px.box(df, y=sel_col, x=color_by, color=color_by,
-                         color_discrete_sequence=COLORS)
-            fig.update_layout(**PLOTLY_LAYOUT, title=f"Box: {sel_col}", height=380)
+                         color_discrete_sequence=EDA_COLORS)
+            fig.update_layout(**EDA_PLOT_LAYOUT, title=f"Box: {sel_col}", height=380)
         else:
             fig = px.violin(df, y=sel_col, box=True, points="outliers",
                             color_discrete_sequence=["#7b61ff"])
-            fig.update_layout(**PLOTLY_LAYOUT, title=f"Violin: {sel_col}", height=380)
+            fig.update_layout(**EDA_PLOT_LAYOUT, title=f"Violin: {sel_col}", height=380)
         st.plotly_chart(fig, use_container_width=True)
 
         # quick stats
@@ -129,7 +102,7 @@ with t3:
     if not corr.empty:
         fig = px.imshow(corr, color_continuous_scale=["#ff4d6d","#141720","#00e5ff"],
                         zmin=-1, zmax=1, text_auto=".2f", aspect="auto")
-        fig.update_layout(**PLOTLY_LAYOUT, title=f"{method.title()} Correlation Matrix",
+        fig.update_layout(**EDA_PLOT_LAYOUT, title=f"{method.title()} Correlation Matrix",
                           coloraxis_colorbar=dict(tickfont=dict(color="#e8eaf0")), height=450)
         fig.update_traces(textfont_color="#e8eaf0")
         st.plotly_chart(fig, use_container_width=True)
@@ -148,7 +121,7 @@ with t4:
             fig = px.bar(out_df.head(10), x="column", y="outlier_%",
                          color="outlier_%",
                          color_continuous_scale=["#00ffa3","#ffb647","#ff4d6d"])
-            fig.update_layout(**PLOTLY_LAYOUT, title="Outlier % by Column", height=320,
+            fig.update_layout(**EDA_PLOT_LAYOUT, title="Outlier % by Column", height=320,
                               coloraxis_showscale=False)
             st.plotly_chart(fig, use_container_width=True)
 
@@ -164,7 +137,7 @@ with t5:
                      text="pct")
         fig.update_traces(texttemplate="%{text}%", textposition="outside",
                           textfont_color="#e8eaf0")
-        fig.update_layout(**PLOTLY_LAYOUT, title=f"Top {top_n}: {sel_cat}",
+        fig.update_layout(**EDA_PLOT_LAYOUT, title=f"Top {top_n}: {sel_cat}",
                           height=max(300, top_n * 25), coloraxis_showscale=False)
         st.plotly_chart(fig, use_container_width=True)
     else:
