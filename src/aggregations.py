@@ -46,3 +46,13 @@ def get_revenue_by_category(data: pd.DataFrame) -> pd.DataFrame:
         .sum()
         .sort_values("TotalSales", ascending=False)
     )
+
+
+def get_regional_monthly_revenue(data: pd.DataFrame) -> pd.DataFrame:
+    """Aggregate revenue by region and month for 3D analysis."""
+    summary = (
+        data.groupby(["Region", data["OrderDate"].dt.to_period("M")], as_index=False)
+        .agg(Revenue=("TotalSales", "sum"))
+    )
+    summary["OrderDate"] = summary["OrderDate"].astype(str)
+    return summary

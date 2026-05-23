@@ -19,7 +19,7 @@ APP_TITLE = "DataPulse Sales Dashboard"
 PAGE_ICON = "⚡"
 
 # --- UI Constants ---
-PAGES = ["Home", "Revenue", "Products", "Customers", "Data Quality"]
+PAGES = ["Home", "Revenue", "Products", "Customers", "3D Analytics", "Data Quality"]
 COLORS = {
     "primary": "#14b8a6",
     "secondary": "#8b5cf6",

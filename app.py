@@ -14,6 +14,7 @@ from src.aggregations import (
     get_monthly_revenue_summary,
     get_revenue_by_region,
     get_revenue_by_category,
+    get_regional_monthly_revenue,
 )
 from src.components import render_kpi_metrics, render_chart, format_money
 
@@ -229,6 +230,58 @@ def show_data_quality(df):
     st.dataframe(df.head(25), use_container_width=True, hide_index=True)
 
 
+def show_3d_analytics(df):
+    st.markdown(section_title("3D Insights"), unsafe_allow_html=True)
+    
+    st.info("Interactive 3D visualizations for deeper data exploration.")
+    
+    tab1, tab2, tab3 = st.tabs(["Customer Segments", "Product Performance", "Regional Trends"])
+    
+    with tab1:
+        customer = get_customer_summary(df)
+        fig = px.scatter_3d(
+            customer,
+            x="Age",
+            y="Revenue",
+            z="Orders",
+            color="Region",
+            symbol="Gender",
+            opacity=0.7,
+            labels={"Revenue": "Total Revenue ($)", "Orders": "Order Count"},
+        )
+        render_chart(fig, "Customer Segmentation (Age vs Revenue vs Orders)", height=650)
+
+    with tab2:
+        product = get_product_summary(df)
+        product["AvgPrice"] = product["Revenue"] / product["Units"].replace(0, 1)
+        fig = px.scatter_3d(
+            product,
+            x="Units",
+            y="Revenue",
+            z="AvgPrice",
+            color="Category",
+            hover_name="ProductName",
+            opacity=0.7,
+            labels={"AvgPrice": "Avg Unit Price ($)"},
+        )
+        render_chart(fig, "Product Landscape (Units vs Revenue vs Price)", height=650)
+
+    with tab3:
+        regional_monthly = get_regional_monthly_revenue(df)
+        regional_monthly = regional_monthly.sort_values("OrderDate")
+        
+        fig = px.scatter_3d(
+            regional_monthly,
+            x="OrderDate",
+            y="Region",
+            z="Revenue",
+            color="Region",
+            size="Revenue",
+            opacity=0.8,
+        )
+        render_chart(fig, "Regional Revenue Evolution", height=650)
+
+
 def main():
     st.markdown(DASHBOARD_CSS, unsafe_allow_html=True)
     df = get_data()
@@ -248,6 +301,7 @@ def main():
         "Revenue": show_revenue,
         "Products": show_products,
         "Customers": show_customers,
+        "3D Analytics": show_3d_analytics,
         "Data Quality": show_data_quality,
     }
     

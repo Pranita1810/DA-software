@@ -45,9 +45,9 @@ q5.metric("Missing%", f"{df.isna().mean().mean()*100:.1f}%")
 st.markdown("---")
 
 # ── Tabs ──────────────────────────────────────────────────────────────────────
-t1, t2, t3, t4, t5, t6 = st.tabs([
+t1, t2, t3, t4, t5, t6, t7 = st.tabs([
     "  OVERVIEW  ","  DISTRIBUTIONS  ","  CORRELATION  ",
-    "  OUTLIERS  ","  CATEGORICAL  ","  NORMALITY  "
+    "  OUTLIERS  ","  CATEGORICAL  ","  NORMALITY  ", "  MULTIVARIATE 3D  "
 ])
 
 # ─ 1. Overview ───────────────────────────────────────────────────────────────
@@ -160,3 +160,29 @@ with t6:
         """, unsafe_allow_html=True)
     except Exception as e:
         st.error(f"scipy required: pip install scipy ({e})")
+
+
+# ─ 7. Multivariate 3D ─────────────────────────────────────────────────────────
+with t7:
+    st.markdown("**MULTIVARIATE 3D RELATIONSHIPS**")
+    ncols = numeric_cols(df)
+    if len(ncols) >= 3:
+        c1, c2, c3 = st.columns(3)
+        x_col = c1.selectbox("X Axis", ncols, index=0, key="3d_x")
+        y_col = c2.selectbox("Y Axis", ncols, index=min(1, len(ncols)-1), key="3d_y")
+        z_col = c3.selectbox("Z Axis", ncols, index=min(2, len(ncols)-1), key="3d_z")
+        
+        cat_cols = categorical_cols(df)
+        color_col = st.selectbox("Color by (optional)", ["None"] + cat_cols, key="3d_color")
+        
+        fig = px.scatter_3d(
+            df, 
+            x=x_col, y=y_col, z=z_col,
+            color=None if color_col == "None" else color_col,
+            opacity=0.7,
+            color_discrete_sequence=EDA_COLORS
+        )
+        fig.update_layout(**EDA_PLOT_LAYOUT, height=600)
+        st.plotly_chart(fig, use_container_width=True)
+    else:
+        st.warning("Need at least 3 numeric columns for 3D scatter plot.")
